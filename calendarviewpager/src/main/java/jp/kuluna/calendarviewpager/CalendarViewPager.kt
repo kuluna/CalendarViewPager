@@ -1,6 +1,7 @@
 package jp.kuluna.calendarviewpager
 
 import android.content.Context
+import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import java.util.*
@@ -21,20 +22,20 @@ open class CalendarViewPager(context: Context, attrs: AttributeSet? = null) : Vi
 
     var onCalendarChangeListener: ((Calendar) -> Unit)? = null
 
-    var calendarAdapter: CalendarPagerAdapter? = null
-        set(value) {
+    override fun setAdapter(adapter: PagerAdapter?) {
+        super.setAdapter(adapter)
+        if (adapter is CalendarPagerAdapter) {
             this.clearOnPageChangeListeners()
 
-            value?.onDayClickLister = onDayClickLister
-            value?.onDayLongClickListener = onDayLongClickListener
-            field = value
-            adapter = value
+            adapter.onDayClickLister = this.onDayClickLister
+            adapter.onDayLongClickListener = this.onDayLongClickListener
 
             setCurrentItem(CalendarPagerAdapter.MAX_VALUE / 2, false)
             this.addOnPageChangeListener(pageChangeListener)
         }
+    }
 
-    fun getCurrentCalendar(): Calendar? = calendarAdapter?.getCalendar(currentItem)
+    fun getCurrentCalendar(): Calendar? = (adapter as? CalendarPagerAdapter)?.getCalendar(currentItem)
 
     fun moveItemBy(position: Int, smoothScroll: Boolean = true) {
         if (position != 0) {
@@ -47,7 +48,7 @@ open class CalendarViewPager(context: Context, attrs: AttributeSet? = null) : Vi
         override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
         override fun onPageSelected(position: Int) {
-            val calendar = calendarAdapter?.getCalendar(position) ?: return
+            val calendar = (adapter as? CalendarPagerAdapter)?.getCalendar(position) ?: return
             onCalendarChangeListener?.invoke(calendar)
         }
     }

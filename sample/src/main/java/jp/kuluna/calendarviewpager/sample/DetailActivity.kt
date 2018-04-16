@@ -25,7 +25,7 @@ class DetailActivity : AppCompatActivity() {
 
         // setup adapter
         val viewPager = findViewById<CalendarViewPager>(R.id.calendar_view_pager)
-        viewPager.calendarAdapter = CustomCalendarAdapter(this)
+        viewPager.adapter = CustomCalendarAdapter(this)
 
         // listeners
         viewPager.onDayClickLister = {

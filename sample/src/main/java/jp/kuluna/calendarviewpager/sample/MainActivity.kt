@@ -19,6 +19,6 @@ class MainActivity : AppCompatActivity() {
 
         // simple setup
         val viewPager = findViewById<CalendarViewPager>(R.id.calendar_view_pager)
-        viewPager.calendarAdapter = CalendarPagerAdapter(this)
+        viewPager.adapter = CalendarPagerAdapter(this)
     }
 }
