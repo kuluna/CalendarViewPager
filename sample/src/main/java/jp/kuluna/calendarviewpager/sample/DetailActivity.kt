@@ -28,7 +28,7 @@ class DetailActivity : AppCompatActivity() {
         viewPager.adapter = CustomCalendarAdapter(this)
 
         // listeners
-        viewPager.onDayClickLister = {
+        viewPager.onDayClickListener = {
             Toast.makeText(this, it.calendar.time.toString(), Toast.LENGTH_SHORT).show()
         }
         viewPager.onCalendarChangeListener = {
@@ -43,9 +43,11 @@ class DetailActivity : AppCompatActivity() {
 }
 
 class CustomCalendarAdapter(context: Context) : CalendarPagerAdapter(context) {
-    override fun getView(day: Day, containerView: View?, parent: ViewGroup?): View {
-        val view = LayoutInflater.from(context).inflate(R.layout.view_calendar_cell, parent, false)
+    override fun onCreateView(parent: ViewGroup, viewType: Int): View {
+        return LayoutInflater.from(context).inflate(R.layout.view_calendar_cell, parent, false)
+    }
 
+    override fun onBindView(view: View, day: Day) {
         if (day.state == DayState.ThisMonth) {
             view.visibility = View.VISIBLE
             view.findViewById<TextView>(R.id.text_day).text = day.calendar.get(Calendar.DAY_OF_MONTH).toString()
@@ -53,7 +55,5 @@ class CustomCalendarAdapter(context: Context) : CalendarPagerAdapter(context) {
         } else {
             view.visibility = View.INVISIBLE
         }
-
-        return view
     }
 }

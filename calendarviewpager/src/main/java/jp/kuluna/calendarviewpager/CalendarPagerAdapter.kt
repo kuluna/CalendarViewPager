@@ -3,9 +3,10 @@ package jp.kuluna.calendarviewpager
 import android.content.Context
 import android.os.Handler
 import android.support.v4.view.PagerAdapter
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridView
 import android.widget.TextView
 import org.apache.commons.lang.time.DateUtils
 import java.util.*
@@ -20,8 +21,8 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
     var selectedDay: Date? = null
     /** 日をクリックした時のコールバックイベントを実行します */
     var onDayClickLister: ((Day) -> Unit)? = null
-    /** 日をロングクリックした時のコールバックイベントを実行します */
-    var onDayLongClickListener: ((Day) -> Boolean)? = null
+//    /** 日をロングクリックした時のコールバックイベントを実行します */
+//    var onDayLongClickListener: ((Day) -> Boolean)? = null
 
     companion object {
         /** 最大ページ */
@@ -32,30 +33,29 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
 
     /** カレンダーViewを生成します */
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val gridView = GridView(context).apply {
-            val gridAdapter = object : DayGridAdapter(context!!, getCalendar(position), selectedDay) {
-                override fun getView(day: Day, containerView: View?, parent: ViewGroup?): View = this@CalendarPagerAdapter.getView(day, containerView, parent)
-            }
+        val recyclerView = RecyclerView(context).apply {
+            layoutManager = GridLayoutManager(context, 7) // 1週間 なので
+            hasFixedSize()
 
-            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            numColumns = 7 // 1週間 なので
-            adapter = gridAdapter
-            setOnItemClickListener { _, _, position, _ ->
-                val day = gridAdapter.items[position]
-                onDayClickLister?.invoke(day)
+            adapter = object : CalendarCellAdapter(context, getCalendar(position), selectedDay) {
+                override fun onBindViewHolder(holder: RecyclerView.ViewHolder, day: Day) {
+                    holder.itemView.setOnClickListener {
+                        this@CalendarPagerAdapter.selectedDay = day.calendar.time
+                        this@CalendarPagerAdapter.onDayClickLister?.invoke(day)
+                        notifyDataSetChangedInContainerView()
+                    }
+                    this@CalendarPagerAdapter.onBindView(holder.itemView, day)
+                }
 
-                // クリック後の再描画イベントを走らせる
-                selectedDay = day.calendar.time
-                notifyDataSetChangedInContainerView()
-            }
-            setOnItemLongClickListener { _, _, position, _ ->
-                onDayLongClickListener?.invoke(gridAdapter.items[position]) ?: true
+                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+                        object : RecyclerView.ViewHolder(this@CalendarPagerAdapter.onCreateView(parent, viewType)) {}
+
             }
         }
-        container.addView(gridView)
+        container.addView(recyclerView, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
         viewContainer = container
 
-        return gridView
+        return recyclerView
     }
 
     /** 画面外のカレンダーViewを消去します */
@@ -75,20 +75,24 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
     fun notifyDataSetChangedInContainerView() {
         val views = viewContainer ?: return
         (0 until views.childCount).forEach { i ->
-            ((views.getChildAt(i) as GridView).adapter as DayGridAdapter).run {
+            ((views.getChildAt(i) as RecyclerView).adapter as CalendarCellAdapter).run {
                 updateItems(selectedDay)
-                Handler().post { notifyDataSetChanged() }
+                Handler().post { notifyItemRangeChanged(0, itemCount) }
             }
         }
     }
 
-    open fun getView(day: Day, containerView: View?, parent: ViewGroup?): View {
+    open fun onCreateView(parent: ViewGroup, viewType: Int): View {
         return TextView(context).apply {
             layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 96)
-            text = when (day.state) {
-                DayState.ThisMonth -> day.calendar.get(Calendar.DAY_OF_MONTH).toString()
-                else -> ""
-            }
+        }
+    }
+
+    open fun onBindView(view: View, day: Day) {
+        val textView = view as TextView
+        textView.text = when (day.state) {
+            DayState.ThisMonth -> day.calendar.get(Calendar.DAY_OF_MONTH).toString()
+            else -> ""
         }
     }
 }

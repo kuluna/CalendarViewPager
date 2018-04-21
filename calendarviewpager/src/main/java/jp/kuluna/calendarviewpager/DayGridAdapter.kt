@@ -1,13 +1,11 @@
 package jp.kuluna.calendarviewpager
 
 import android.content.Context
+import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
-import android.view.View
-import android.view.ViewGroup
-import android.widget.BaseAdapter
 import java.util.*
 
-abstract class DayGridAdapter : BaseAdapter {
+abstract class CalendarCellAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private val context: Context
     private val calendar: Calendar
     private val weekOfMonth: Int
@@ -32,7 +30,7 @@ abstract class DayGridAdapter : BaseAdapter {
     }
 
     fun updateItems(selectedDate: Date? = null) {
-        this.items = (0..count).map {
+        this.items = (0..itemCount).map {
             val cal = Calendar.getInstance().apply { time = startDate.time }
             cal.add(Calendar.DAY_OF_MONTH, it)
 
@@ -52,15 +50,13 @@ abstract class DayGridAdapter : BaseAdapter {
         }
     }
 
-    override fun getView(position: Int, containerView: View?, parent: ViewGroup?): View = getView(items[position], containerView, parent)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        onBindViewHolder(holder, items[holder.layoutPosition])
+    }
 
-    override fun getItem(position: Int): Day = items[position]
+    override fun getItemCount(): Int = 7 * weekOfMonth
 
-    override fun getItemId(position: Int): Long = position.toLong()
-
-    override fun getCount(): Int = 7 * weekOfMonth
-
-    abstract fun getView(day: Day, containerView: View?, parent: ViewGroup?): View
+    abstract fun onBindViewHolder(holder: RecyclerView.ViewHolder, day: Day)
 }
 
 data class Day(

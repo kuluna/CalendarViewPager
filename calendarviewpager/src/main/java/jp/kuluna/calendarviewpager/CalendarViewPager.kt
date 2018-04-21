@@ -8,17 +8,17 @@ import java.util.*
 
 open class CalendarViewPager(context: Context, attrs: AttributeSet? = null) : ViewPager(context, attrs) {
 
-    var onDayClickLister: ((Day) -> Unit)? = null
+    var onDayClickListener: ((Day) -> Unit)? = null
         set(value) {
             field = value
             (adapter as? CalendarPagerAdapter)?.onDayClickLister = field
         }
 
-    var onDayLongClickListener: ((Day) -> Boolean)? = null
-        set(value) {
-            field = value
-            (adapter as? CalendarPagerAdapter)?.onDayLongClickListener = field
-        }
+//    var onDayLongClickListener: ((Day) -> Boolean)? = null
+//        set(value) {
+//            field = value
+//            (adapter as? CalendarPagerAdapter)?.onDayLongClickListener = field
+//        }
 
     var onCalendarChangeListener: ((Calendar) -> Unit)? = null
 
@@ -27,8 +27,8 @@ open class CalendarViewPager(context: Context, attrs: AttributeSet? = null) : Vi
         if (adapter is CalendarPagerAdapter) {
             this.clearOnPageChangeListeners()
 
-            adapter.onDayClickLister = this.onDayClickLister
-            adapter.onDayLongClickListener = this.onDayLongClickListener
+            adapter.onDayClickLister = this.onDayClickListener
+//            adapter.onDayLongClickListener = this.onDayLongClickListener
 
             setCurrentItem(CalendarPagerAdapter.MAX_VALUE / 2, false)
             this.addOnPageChangeListener(pageChangeListener)
