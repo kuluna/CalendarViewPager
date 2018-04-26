@@ -50,7 +50,6 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
                         } else {
                             false
                         }
-
                     }
                     this@CalendarPagerAdapter.onBindView(holder.itemView, day)
                 }
