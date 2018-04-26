@@ -22,7 +22,7 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
     /** 日をクリックした時のコールバックイベントを実行します */
     var onDayClickLister: ((Day) -> Unit)? = null
     /** 日をロングクリックした時のコールバックイベントを実行します */
-    var onDayLongClickListener: ((Day) -> Unit)? = null
+    var onDayLongClickListener: ((Day) -> Boolean)? = null
 
     companion object {
         /** 最大ページ */
@@ -45,8 +45,12 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
                         notifyDataSetChangedInContainerView()
                     }
                     holder.itemView.setOnLongClickListener {
-                        this@CalendarPagerAdapter.onDayLongClickListener?.invoke(day)
-                        true
+                        if (this@CalendarPagerAdapter.onDayLongClickListener != null) {
+                            this@CalendarPagerAdapter.onDayLongClickListener!!.invoke(day)
+                        } else {
+                            false
+                        }
+
                     }
                     this@CalendarPagerAdapter.onBindView(holder.itemView, day)
                 }

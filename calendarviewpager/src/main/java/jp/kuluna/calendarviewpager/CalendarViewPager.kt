@@ -14,7 +14,7 @@ open class CalendarViewPager(context: Context, attrs: AttributeSet? = null) : Vi
             (adapter as? CalendarPagerAdapter)?.onDayClickLister = field
         }
 
-    var onDayLongClickListener: ((Day) -> Unit)? = null
+    var onDayLongClickListener: ((Day) -> Boolean)? = null
         set(value) {
             field = value
             (adapter as? CalendarPagerAdapter)?.onDayLongClickListener = field
