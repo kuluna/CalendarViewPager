@@ -33,7 +33,6 @@ class DetailActivity : AppCompatActivity() {
         }
         viewPager.onDayLongClickListener = {
             Toast.makeText(this, "Long Clicked :"+it.calendar.time.toString(), Toast.LENGTH_SHORT).show()
-            // ここで返却値を変更します
             true
         }
         viewPager.onCalendarChangeListener = {
