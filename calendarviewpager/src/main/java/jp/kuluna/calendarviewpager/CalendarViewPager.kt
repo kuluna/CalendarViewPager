@@ -14,11 +14,11 @@ open class CalendarViewPager(context: Context, attrs: AttributeSet? = null) : Vi
             (adapter as? CalendarPagerAdapter)?.onDayClickLister = field
         }
 
-//    var onDayLongClickListener: ((Day) -> Boolean)? = null
-//        set(value) {
-//            field = value
-//            (adapter as? CalendarPagerAdapter)?.onDayLongClickListener = field
-//        }
+    var onDayLongClickListener: ((Day) -> Boolean)? = null
+        set(value) {
+            field = value
+            (adapter as? CalendarPagerAdapter)?.onDayLongClickListener = field
+        }
 
     var onCalendarChangeListener: ((Calendar) -> Unit)? = null
 
@@ -28,7 +28,7 @@ open class CalendarViewPager(context: Context, attrs: AttributeSet? = null) : Vi
             this.clearOnPageChangeListeners()
 
             adapter.onDayClickLister = this.onDayClickListener
-//            adapter.onDayLongClickListener = this.onDayLongClickListener
+            adapter.onDayLongClickListener = this.onDayLongClickListener
 
             setCurrentItem(CalendarPagerAdapter.MAX_VALUE / 2, false)
             this.addOnPageChangeListener(pageChangeListener)

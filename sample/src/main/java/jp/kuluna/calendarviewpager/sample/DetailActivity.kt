@@ -31,6 +31,10 @@ class DetailActivity : AppCompatActivity() {
         viewPager.onDayClickListener = {
             Toast.makeText(this, it.calendar.time.toString(), Toast.LENGTH_SHORT).show()
         }
+        viewPager.onDayLongClickListener = {
+            Toast.makeText(this, "Long Clicked :"+it.calendar.time.toString(), Toast.LENGTH_SHORT).show()
+            true
+        }
         viewPager.onCalendarChangeListener = {
             setDateHeader(it)
         }
