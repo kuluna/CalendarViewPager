@@ -21,8 +21,8 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
     var selectedDay: Date? = null
     /** 日をクリックした時のコールバックイベントを実行します */
     var onDayClickLister: ((Day) -> Unit)? = null
-//    /** 日をロングクリックした時のコールバックイベントを実行します */
-//    var onDayLongClickListener: ((Day) -> Boolean)? = null
+    /** 日をロングクリックした時のコールバックイベントを実行します */
+    var onDayLongClickListener: ((Day) -> Unit)? = null
 
     companion object {
         /** 最大ページ */
@@ -44,9 +44,12 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
                         this@CalendarPagerAdapter.onDayClickLister?.invoke(day)
                         notifyDataSetChangedInContainerView()
                     }
+                    holder.itemView.setOnLongClickListener {
+                        this@CalendarPagerAdapter.onDayLongClickListener?.invoke(day)
+                        true
+                    }
                     this@CalendarPagerAdapter.onBindView(holder.itemView, day)
                 }
-
                 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
                         object : RecyclerView.ViewHolder(this@CalendarPagerAdapter.onCreateView(parent, viewType)) {}
 
