@@ -9,7 +9,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0.0"
+        versionName "1.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 }
@@ -27,7 +27,7 @@ publish {
     userOrg = 'kuluna'
     groupId = 'jp.kuluna'
     artifactId = 'calendarviewpager'
-    publishVersion = '1.0.0'
+    publishVersion = '1.1.0'
     desc = 'Simple and free customize calendar view.'
     website = 'https://github.com/kuluna/CalendarViewPager'
 }
@@ -38,8 +38,8 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$support_version"
     implementation 'commons-lang:commons-lang:2.6'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
 tasks.withType(Javadoc).all {
