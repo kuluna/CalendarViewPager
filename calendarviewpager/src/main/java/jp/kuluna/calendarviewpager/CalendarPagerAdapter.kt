@@ -18,6 +18,10 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
 
     /** 選択されている日 */
     var selectedDay: Date? = null
+        set(value) {
+            field = value
+            notifyCalendarItemChanged()
+        }
     /** 日をクリックした時のコールバックイベントを実行します */
     var onDayClickLister: ((Day) -> Unit)? = null
     /** 日をロングクリックした時のコールバックイベントを実行します */
@@ -41,7 +45,7 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
                     holder.itemView.setOnClickListener {
                         this@CalendarPagerAdapter.selectedDay = day.calendar.time
                         this@CalendarPagerAdapter.onDayClickLister?.invoke(day)
-                        notifyDataSetChangedInContainerView()
+                        notifyCalendarItemChanged()
                     }
                     holder.itemView.setOnLongClickListener {
                         if (this@CalendarPagerAdapter.onDayLongClickListener != null) {
@@ -78,7 +82,16 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
     }
 
     /** PagerAdapter内にあるカレンダーを再描画します */
-    fun notifyDataSetChangedInContainerView() {
+    fun notifyCalendarChanged() {
+        val views = viewContainer ?: return
+        (0 until views.childCount).forEach { i ->
+            ((views.getChildAt(i) as? RecyclerView)?.adapter as? CalendarCellAdapter)?.run {
+                notifyItemRangeChanged(0, items.size)
+            }
+        }
+    }
+
+    private fun notifyCalendarItemChanged() {
         val views = viewContainer ?: return
         (0 until views.childCount).forEach { i ->
             ((views.getChildAt(i) as? RecyclerView)?.adapter as? CalendarCellAdapter)?.updateItems(selectedDay)
