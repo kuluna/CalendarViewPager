@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
 import java.util.*
+import kotlin.properties.Delegates
 
 abstract class CalendarCellAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private val context: Context
@@ -11,7 +12,9 @@ abstract class CalendarCellAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
     private val weekOfMonth: Int
     private val startDate: Calendar
 
-    lateinit var items: List<Day>
+    var items: List<Day> by Delegates.observable(emptyList(), { _, old, new ->
+        CalendarDiff(old, new).calculateDiff().dispatchUpdatesTo(this)
+    })
 
     constructor(context: Context, date: Date, preselectedDay: Date? = null) : this(context, Calendar.getInstance().apply { time = date }, preselectedDay)
 

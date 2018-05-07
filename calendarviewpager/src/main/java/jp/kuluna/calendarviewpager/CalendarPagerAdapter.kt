@@ -1,7 +1,6 @@
 package jp.kuluna.calendarviewpager
 
 import android.content.Context
-import android.os.Handler
 import android.support.v4.view.PagerAdapter
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -53,6 +52,7 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
                     }
                     this@CalendarPagerAdapter.onBindView(holder.itemView, day)
                 }
+
                 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
                         object : RecyclerView.ViewHolder(this@CalendarPagerAdapter.onCreateView(parent, viewType)) {}
 
@@ -81,10 +81,7 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
     fun notifyDataSetChangedInContainerView() {
         val views = viewContainer ?: return
         (0 until views.childCount).forEach { i ->
-            ((views.getChildAt(i) as RecyclerView).adapter as CalendarCellAdapter).run {
-                updateItems(selectedDay)
-                Handler().post { notifyItemRangeChanged(0, itemCount) }
-            }
+            ((views.getChildAt(i) as? RecyclerView)?.adapter as? CalendarCellAdapter)?.updateItems(selectedDay)
         }
     }
 

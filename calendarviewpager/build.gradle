@@ -8,8 +8,7 @@ android {
         consumerProguardFiles 'proguard-rules.pro'
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.1.0"
+        versionName "1.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 }
@@ -23,15 +22,6 @@ buildscript {
     }
 }
 
-publish {
-    userOrg = 'kuluna'
-    groupId = 'jp.kuluna'
-    artifactId = 'calendarviewpager'
-    publishVersion = '1.1.0'
-    desc = 'Simple and free customize calendar view.'
-    website = 'https://github.com/kuluna/CalendarViewPager'
-}
-
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "com.android.support:support-v4:$support_version"
@@ -40,6 +30,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+publish {
+    userOrg = 'kuluna'
+    groupId = 'jp.kuluna'
+    artifactId = 'calendarviewpager'
+    publishVersion = '1.1.1'
+    desc = 'Simple and free customize calendar view.'
+    website = 'https://github.com/kuluna/CalendarViewPager'
 }
 
 tasks.withType(Javadoc).all {
