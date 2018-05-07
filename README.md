@@ -15,7 +15,7 @@ Require Android 5.0+
 Add build.gradle
 
 ```
-implementation 'jp.kuluna:calendarviewpager:1.0.0'
+implementation 'jp.kuluna:calendarviewpager:1.1.1'
 ```
 
 # Simple Usage
@@ -65,6 +65,12 @@ viewPager.adapter = CustomCalendarAdapter(this)
 viewPager.onDayClickListener = { day: Day ->
   Toast.makeText(this, day.calendar.time.toString(), Toast.LENGTH_SHORT).show()
 }
+
+viewPager.onDayLongClickListener = { day: Day ->
+    Toast.makeText(this, "Long Clicked :" + day.calendar.time.toString(), Toast.LENGTH_SHORT).show()
+    true
+}
+
 viewPager.onCalendarChangeListener = { calendar: Calendar ->
     Toast.makeText(this, calendar.time.toString(), Toast.LENGTH_SHORT).show()
 }
