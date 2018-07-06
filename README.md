@@ -15,7 +15,7 @@ Require Android 5.0+
 Add build.gradle
 
 ```
-implementation 'jp.kuluna:calendarviewpager:1.1.1'
+implementation 'jp.kuluna:calendarviewpager:1.2.0'
 ```
 
 # Simple Usage
