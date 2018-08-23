@@ -12,9 +12,9 @@ abstract class CalendarCellAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
     private val weekOfMonth: Int
     private val startDate: Calendar
 
-    var items: List<Day> by Delegates.observable(emptyList(), { _, old, new ->
+    var items: List<Day> by Delegates.observable(emptyList()) { _, old, new ->
         CalendarDiff(old, new).calculateDiff().dispatchUpdatesTo(this)
-    })
+    }
 
     constructor(context: Context, date: Date, preselectedDay: Date? = null) : this(context, Calendar.getInstance().apply { time = date }, preselectedDay)
 

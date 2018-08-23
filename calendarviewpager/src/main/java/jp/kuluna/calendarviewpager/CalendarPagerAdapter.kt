@@ -38,6 +38,7 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val recyclerView = RecyclerView(context).apply {
             layoutManager = GridLayoutManager(context, 7) // 1週間 なので
+            overScrollMode = View.OVER_SCROLL_NEVER
             hasFixedSize()
 
             adapter = object : CalendarCellAdapter(context, getCalendar(position), selectedDay) {

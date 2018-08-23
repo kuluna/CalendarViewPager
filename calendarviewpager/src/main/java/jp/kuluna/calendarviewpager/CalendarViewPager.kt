@@ -35,6 +35,22 @@ open class CalendarViewPager(context: Context, attrs: AttributeSet? = null) : Vi
         }
     }
 
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        // initialized child views
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+        // support wrap_content
+        val mode = MeasureSpec.getMode(heightMeasureSpec)
+        if (mode == MeasureSpec.AT_MOST) {
+            val view = focusedChild ?: getChildAt(0)
+            view.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
+            val newHeight = view.measuredHeight
+
+            val exactlyHeightMeasureSpec = MeasureSpec.makeMeasureSpec(newHeight, MeasureSpec.EXACTLY)
+            super.onMeasure(widthMeasureSpec, exactlyHeightMeasureSpec)
+        }
+    }
+
     fun getCurrentCalendar(): Calendar? = (adapter as? CalendarPagerAdapter)?.getCalendar(currentItem)
 
     fun moveItemBy(position: Int, smoothScroll: Boolean = true) {
