@@ -24,7 +24,7 @@ abstract class CalendarCellAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
         this.weekOfMonth = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH)
 
         // Viewのはじめの日を求める
-        val start = org.apache.commons.lang.time.DateUtils.truncate(calendar, Calendar.DAY_OF_MONTH)
+        val start = org.apache.commons.lang3.time.DateUtils.truncate(calendar, Calendar.DAY_OF_MONTH)
         start.set(Calendar.DAY_OF_MONTH, 1)
         start.add(Calendar.DAY_OF_MONTH, -start.get(Calendar.DAY_OF_WEEK) + 1)
         startDate = start
@@ -45,7 +45,7 @@ abstract class CalendarCellAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             val isSelected = when (selectedDate) {
                 null -> false
-                else -> org.apache.commons.lang.time.DateUtils.isSameDay(cal.time, selectedDate)
+                else -> org.apache.commons.lang3.time.DateUtils.isSameDay(cal.time, selectedDate)
             }
             val isToday = DateUtils.isToday(cal.timeInMillis)
 

@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import org.apache.commons.lang.time.DateUtils
+import org.apache.commons.lang3.time.DateUtils
 import java.util.*
 
 open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.getInstance()) : PagerAdapter() {
