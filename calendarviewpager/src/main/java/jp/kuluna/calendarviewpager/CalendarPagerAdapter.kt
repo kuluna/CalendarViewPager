@@ -39,7 +39,6 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
         val recyclerView = RecyclerView(context).apply {
             layoutManager = GridLayoutManager(context, 7) // 1週間 なので
             isNestedScrollingEnabled = false
-            overScrollMode = View.OVER_SCROLL_NEVER
             hasFixedSize()
 
             adapter = object : CalendarCellAdapter(context, getCalendar(position), selectedDay) {
