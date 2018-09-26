@@ -1,6 +1,6 @@
 package jp.kuluna.calendarviewpager
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 
 class CalendarDiff(private val old: List<Day>, private val new: List<Day>) : DiffUtil.Callback() {
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = old[oldItemPosition] == new[newItemPosition]

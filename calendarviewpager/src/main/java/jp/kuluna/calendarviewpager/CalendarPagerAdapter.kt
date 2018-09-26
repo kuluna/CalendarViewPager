@@ -1,9 +1,9 @@
 package jp.kuluna.calendarviewpager
 
 import android.content.Context
-import android.support.v4.view.PagerAdapter
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.viewpager.widget.PagerAdapter
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -38,6 +38,7 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val recyclerView = RecyclerView(context).apply {
             layoutManager = GridLayoutManager(context, 7) // 1週間 なので
+            isNestedScrollingEnabled = false
             overScrollMode = View.OVER_SCROLL_NEVER
             hasFixedSize()
 
