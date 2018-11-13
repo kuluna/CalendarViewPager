@@ -2,7 +2,7 @@ package jp.kuluna.calendarviewpager
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import android.text.format.DateUtils
+import org.apache.commons.lang3.time.DateUtils
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -24,7 +24,7 @@ abstract class CalendarCellAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
         this.weekOfMonth = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH)
 
         // Viewのはじめの日を求める
-        val start = org.apache.commons.lang3.time.DateUtils.truncate(calendar, Calendar.DAY_OF_MONTH)
+        val start = DateUtils.truncate(calendar, Calendar.DAY_OF_MONTH)
         start.set(Calendar.DAY_OF_MONTH, 1)
         start.add(Calendar.DAY_OF_MONTH, -start.get(Calendar.DAY_OF_WEEK) + 1)
         startDate = start
@@ -33,6 +33,8 @@ abstract class CalendarCellAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     fun updateItems(selectedDate: Date? = null) {
+        val now = Calendar.getInstance()
+
         this.items = (0..itemCount).map {
             val cal = Calendar.getInstance().apply { time = startDate.time }
             cal.add(Calendar.DAY_OF_MONTH, it)
@@ -45,9 +47,9 @@ abstract class CalendarCellAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             val isSelected = when (selectedDate) {
                 null -> false
-                else -> org.apache.commons.lang3.time.DateUtils.isSameDay(cal.time, selectedDate)
+                else -> DateUtils.isSameDay(cal.time, selectedDate)
             }
-            val isToday = DateUtils.isToday(cal.timeInMillis)
+            val isToday = DateUtils.isSameDay(cal, now)
 
             Day(cal, state, isToday, isSelected)
         }
@@ -63,10 +65,10 @@ abstract class CalendarCellAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
 }
 
 data class Day(
-        var calendar: Calendar = Calendar.getInstance(),
-        var state: DayState = DayState.PreviousMonth,
-        var isToday: Boolean = false,
-        var isSelected: Boolean = false
+        var calendar: Calendar,
+        var state: DayState,
+        var isToday: Boolean,
+        var isSelected: Boolean
 )
 
 enum class DayState {
