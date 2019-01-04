@@ -46,7 +46,7 @@ class DetailActivity : AppCompatActivity() {
     }
 }
 
-class CustomCalendarAdapter(context: Context) : CalendarPagerAdapter(context) {
+class CustomCalendarAdapter(context: Context) : CalendarPagerAdapter(context, isStartAtMonday = true) {
     override fun onCreateView(parent: ViewGroup, viewType: Int): View {
         return LayoutInflater.from(context).inflate(R.layout.view_calendar_cell, parent, false)
     }

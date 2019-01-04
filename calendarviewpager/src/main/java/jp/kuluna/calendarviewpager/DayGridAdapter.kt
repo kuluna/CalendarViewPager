@@ -16,18 +16,21 @@ abstract class CalendarCellAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
         CalendarDiff(old, new).calculateDiff().dispatchUpdatesTo(this)
     }
 
-    constructor(context: Context, date: Date, preselectedDay: Date? = null) : this(context, Calendar.getInstance().apply { time = date }, preselectedDay)
+    constructor(context: Context, date: Date, preselectedDay: Date? = null) : this(context, Calendar.getInstance().apply { time = date }, false, preselectedDay)
 
-    constructor(context: Context, calendar: Calendar, preselectedDay: Date? = null) : super() {
+    constructor(context: Context, calendar: Calendar, isStartAtMonday: Boolean, preselectedDay: Date? = null) : super() {
         this.context = context
         this.calendar = calendar
-        this.weekOfMonth = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH)
 
         // Viewのはじめの日を求める
         val start = DateUtils.truncate(calendar, Calendar.DAY_OF_MONTH)
-        start.set(Calendar.DAY_OF_MONTH, 1)
-        start.add(Calendar.DAY_OF_MONTH, -start.get(Calendar.DAY_OF_WEEK) + 1)
+        start.set(Calendar.DAY_OF_MONTH, if (isStartAtMonday) 0 else 1)
+        start.add(Calendar.DAY_OF_MONTH, -start.get(Calendar.DAY_OF_WEEK) + if (isStartAtMonday) 2 else 1)
         startDate = start
+        val end = DateUtils.truncate(calendar, Calendar.DAY_OF_MONTH)
+        end.add(Calendar.MONTH, 1)
+        end.add(Calendar.DATE, -1)
+        this.weekOfMonth = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH) + if (calendar.get(Calendar.DAY_OF_WEEK) == 1 && isStartAtMonday) 1 else 0 - if (end.get(Calendar.DAY_OF_WEEK) == 1 && isStartAtMonday) 1 else 0
 
         updateItems(preselectedDay)
     }

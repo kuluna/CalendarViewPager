@@ -10,7 +10,10 @@ import android.widget.TextView
 import org.apache.commons.lang3.time.DateUtils
 import java.util.*
 
-open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.getInstance()) : PagerAdapter() {
+/**
+ * @param isStartAtMonday カレンダー表記を月曜開始にするかどうか。falseにすると日曜開始になります
+ */
+open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.getInstance(), val isStartAtMonday: Boolean = false) : PagerAdapter() {
     private val baseCalendar: Calendar = DateUtils.truncate(base, Calendar.DAY_OF_MONTH).apply {
         set(Calendar.DAY_OF_MONTH, 1)
     }
@@ -41,7 +44,7 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
             isNestedScrollingEnabled = false
             hasFixedSize()
 
-            adapter = object : CalendarCellAdapter(context, getCalendar(position), selectedDay) {
+            adapter = object : CalendarCellAdapter(context, getCalendar(position), isStartAtMonday, selectedDay) {
                 override fun onBindViewHolder(holder: RecyclerView.ViewHolder, day: Day) {
                     holder.itemView.setOnClickListener {
                         this@CalendarPagerAdapter.selectedDay = day.calendar.time
