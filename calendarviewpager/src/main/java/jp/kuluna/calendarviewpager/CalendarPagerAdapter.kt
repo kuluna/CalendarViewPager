@@ -13,7 +13,7 @@ import java.util.*
 /**
  * @param isStartAtMonday カレンダー表記を月曜開始にするかどうか。falseにすると日曜開始になります
  */
-open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.getInstance(), val isStartingAt: DayOfWeek = DayOfWeek.Sunday) : PagerAdapter() {
+open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.getInstance(), val startingAt: DayOfWeek = DayOfWeek.Sunday) : PagerAdapter() {
     private val baseCalendar: Calendar = DateUtils.truncate(base, Calendar.DAY_OF_MONTH).apply {
         set(Calendar.DAY_OF_MONTH, 1)
     }
@@ -44,7 +44,7 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
             isNestedScrollingEnabled = false
             hasFixedSize()
 
-            adapter = object : CalendarCellAdapter(context, getCalendar(position), isStartingAt, selectedDay) {
+            adapter = object : CalendarCellAdapter(context, getCalendar(position), startingAt, selectedDay) {
                 override fun onBindViewHolder(holder: RecyclerView.ViewHolder, day: Day) {
                     holder.itemView.setOnClickListener {
                         this@CalendarPagerAdapter.selectedDay = day.calendar.time
