@@ -10,7 +10,10 @@ import android.widget.TextView
 import org.apache.commons.lang3.time.DateUtils
 import java.util.*
 
-open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.getInstance()) : PagerAdapter() {
+/**
+ * @param isStartAtMonday カレンダー表記を月曜開始にするかどうか。falseにすると日曜開始になります
+ */
+open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.getInstance(), val startingAt: DayOfWeek = DayOfWeek.Sunday) : PagerAdapter() {
     private val baseCalendar: Calendar = DateUtils.truncate(base, Calendar.DAY_OF_MONTH).apply {
         set(Calendar.DAY_OF_MONTH, 1)
     }
@@ -41,7 +44,7 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
             isNestedScrollingEnabled = false
             hasFixedSize()
 
-            adapter = object : CalendarCellAdapter(context, getCalendar(position), selectedDay) {
+            adapter = object : CalendarCellAdapter(context, getCalendar(position), startingAt, selectedDay) {
                 override fun onBindViewHolder(holder: RecyclerView.ViewHolder, day: Day) {
                     holder.itemView.setOnClickListener {
                         this@CalendarPagerAdapter.selectedDay = day.calendar.time
@@ -110,6 +113,42 @@ open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.
         textView.text = when (day.state) {
             DayState.ThisMonth -> day.calendar.get(Calendar.DAY_OF_MONTH).toString()
             else -> ""
+        }
+    }
+
+    enum class DayOfWeek {
+        Sunday,
+        Monday,
+        Tuesday,
+        Wednesday,
+        Thursday,
+        Friday,
+        Saturday;
+
+        /** 基準(日曜日)との日数の差 */
+        fun getDifference(): Int {
+            return when (this) {
+                Sunday -> 0
+                Monday -> 1
+                Tuesday -> 2
+                Wednesday -> 3
+                Thursday -> 4
+                Friday -> 5
+                Saturday -> 6
+            }
+        }
+
+        /** 最初の週が少なくなっている */
+        fun isLessFirstWeek(calendar: Calendar): Boolean {
+            return calendar.get(Calendar.DAY_OF_WEEK) < getDifference() + 1
+        }
+
+        /** 最後の週が多くなっている */
+        fun isMoreLastWeek(calendar: Calendar): Boolean {
+            val end = DateUtils.truncate(calendar, Calendar.DAY_OF_MONTH)
+            end.add(Calendar.MONTH, 1)
+            end.add(Calendar.DATE, -1)
+            return end.get(Calendar.DAY_OF_WEEK) < getDifference() + 1
         }
     }
 }

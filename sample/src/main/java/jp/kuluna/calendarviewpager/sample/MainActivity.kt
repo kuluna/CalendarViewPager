@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         // simple setup
         val viewPager = findViewById<CalendarViewPager>(R.id.calendar_view_pager)
-        viewPager.adapter = CalendarPagerAdapter(this)
+        // カレンダーの開始曜日を指定する場合は下記のようにstartingAtを使用してください
+        viewPager.adapter = CalendarPagerAdapter(this, startingAt = CalendarPagerAdapter.DayOfWeek.Monday)
     }
 }
