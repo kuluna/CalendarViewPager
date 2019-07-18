@@ -16,6 +16,12 @@ import java.util.*
 open class CalendarPagerAdapter(val context: Context, base: Calendar = Calendar.getInstance(), val startingAt: DayOfWeek = DayOfWeek.Sunday) : PagerAdapter() {
     private val baseCalendar: Calendar = DateUtils.truncate(base, Calendar.DAY_OF_MONTH).apply {
         set(Calendar.DAY_OF_MONTH, 1)
+        // 週が何曜日からはじまるか
+        // 初期値はJP/USなどでは「1(SUNDAY)」だが、一部地域(UK)は「2(MONDAY)」なので引数で指定された曜日へ変更しておく
+        firstDayOfWeek = Calendar.SUNDAY + startingAt.getDifference()
+        // 最初の週を何日以上とするか
+        // JP/USなどは「1」だが、一部地域(UK)の場合は「4」となるため対象月の週数の算出結果が想定より少ない値となってしまう
+        minimalDaysInFirstWeek = 1
     }
     private var viewContainer: ViewGroup? = null
 
