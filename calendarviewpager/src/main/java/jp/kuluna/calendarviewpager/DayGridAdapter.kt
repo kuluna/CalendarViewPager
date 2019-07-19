@@ -24,8 +24,12 @@ abstract class CalendarCellAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
 
         // Viewのはじめの日を求める
         val start = DateUtils.truncate(calendar, Calendar.DAY_OF_MONTH)
-        start.set(Calendar.DAY_OF_MONTH, if (startingAt.isLessFirstWeek(calendar)) -startingAt.getDifference() else 0)
-        start.add(Calendar.DAY_OF_MONTH, -start.get(Calendar.DAY_OF_WEEK) + 1 + startingAt.getDifference())
+        if (start.get(Calendar.DAY_OF_WEEK) != (startingAt.getDifference() + 1)) {
+            // 表示を開始する日にちの曜日が、基準となる曜日と異なる曜日であれば、前月の最終週の日にちの算出を行う
+            // 同じ曜日の場合に算出してしまうと1週ずれてしまう
+            start.set(Calendar.DAY_OF_MONTH, if (startingAt.isLessFirstWeek(calendar)) -startingAt.getDifference() else 0)
+            start.add(Calendar.DAY_OF_MONTH, -start.get(Calendar.DAY_OF_WEEK) + 1 + startingAt.getDifference())
+        }
         startDate = start
         this.weekOfMonth = calendar.getActualMaximum(Calendar.WEEK_OF_MONTH) + (if (startingAt.isLessFirstWeek(calendar)) 1 else 0) - (if (startingAt.isMoreLastWeek(calendar)) 1 else 0)
 
