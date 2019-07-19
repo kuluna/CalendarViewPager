@@ -4,14 +4,14 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'jp.kuluna'
-version = '2.1.1'
+version = '2.1.2'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         consumerProguardFiles 'proguard-rules.pro'
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
