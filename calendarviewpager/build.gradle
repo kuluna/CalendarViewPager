@@ -4,7 +4,7 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'jp.kuluna'
-version = '2.1.0'
+version = '2.1.1'
 
 android {
     compileSdkVersion 28
