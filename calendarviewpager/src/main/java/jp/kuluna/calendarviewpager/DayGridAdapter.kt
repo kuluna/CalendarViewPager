@@ -46,7 +46,7 @@ abstract class CalendarCellAdapter : RecyclerView.Adapter<RecyclerView.ViewHolde
             val thisTime = calendar.get(Calendar.YEAR) * 12 + calendar.get(Calendar.MONTH)
             val compareTime = cal.get(Calendar.YEAR) * 12 + cal.get(Calendar.MONTH)
 
-            val state = when (thisTime.compareTo(compareTime) {
+            val state = when (thisTime.compareTo(compareTime)) {
                 -1 -> DayState.NextMonth
                 0 -> DayState.ThisMonth
                 1 -> DayState.PreviousMonth
